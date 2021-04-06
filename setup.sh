@@ -17,7 +17,7 @@ IP=$(minikube ip)
 printf "Minikube IP: ${IP}"
 
 echo "Building images ->"
-docker build -t nginx ./srcs/nginx
+docker build -t ftps ./srcs/ftps
 
 echo "Creating pods and services ->"
 kubectl create -f ./srcs/
