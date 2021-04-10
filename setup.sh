@@ -1,5 +1,6 @@
 #!/bin/sh
 
+minikube delete
 echo "Starting minikube ->"
 minikube --vm-driver=virtual-box
 minikube start
@@ -20,4 +21,4 @@ echo "Building images ->"
 docker build -t ftps ./srcs/ftps
 
 echo "Creating pods and services ->"
-kubectl create -f ./srcs/
+kubectl apply -f ./srcs/ftps/srcs/ftps.yaml
