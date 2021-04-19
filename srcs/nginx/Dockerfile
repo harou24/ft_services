@@ -1,25 +1,36 @@
-FROM	alpine
+FROM	alpine:3.12
 
-RUN	apk update && apk add --no-cache nginx openssl
+ARG	SSH_USERNAME
+ARG	SSH_PASSWORD
 
-RUN	adduser -D 'www' -g www
+RUN	apk update && apk upgrade
 
-RUN	mkdir /www && chmod +x /www && \
-		chown -R www:www /var/lib/nginx && \
-		chown -R www:www /www && \
-		mkdir -p /run/nginx
+RUN	apk add openssh
+RUN	apk add nginx
+RUN	apk add openssl
 
-COPY	srcs/index.html /www/
+RUN	apk add telegraf --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
+
+COPY	telegraf.conf /etc/telegraf/telegraf.conf
+
+RUN	adduser -D $SSH_USERNAME
+RUN	echo "$SSH_USERNAME:$SSH_PASSWORD" | chpasswd
+RUN	ssh-keygen -A
 
 RUN	openssl req -x509 -nodes -days 365 \
 		-newkey rsa:2048 -subj "/C=NL/ST=Amserdam/O=Codam-42/CN=harou" \
-		-keyout /etc/ssl/private/nginx.key \
-		-out /etc/ssl/certs/nginx.crt
+		-keyout /etc/ssl/private/certificate.key \
+		-out /etc/ssl/certs/certificate.crt
 
-COPY	srcs/nginx.conf /etc/nginx/
-COPY	srcs/start.sh .
-RUN	chmod +x start.sh
+RUN	mkdir -p /var/www/localhost
+COPY	index.html /var/www/localhost/index.html
 
-EXPOSE 80 443
+RUN	mkdir -p /run/nginx
+RUN	rm		/etc/nginx/conf.d/default.conf
+COPY 	localhost.conf	/etc/nginx/conf.d/localhost.conf
 
-ENTRYPOINT	sh start.sh
+ADD	start.sh /setup/start.sh
+
+EXPOSE	22 80 443
+
+ENTRYPOINT	sh /setup/start.sh

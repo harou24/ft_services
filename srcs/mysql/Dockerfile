@@ -1,15 +1,27 @@
-FROM	alpine
+FROM	alpine:3.12
 
-RUN	apk update
+ARG	MYSQL_USERNAME
+ARG	MYSQL_PASSWORD
 
-RUN	apk add --no-cache mysql mysql-client
+RUN	apk update && apk upgrade
 
-RUN	adduser -D 'harou42' -g mysql
+RUN	apk add mariadb mariadb-common mariadb-client
 
-COPY 	srcs/my.cnf /etc/
-COPY	srcs/start.sh .
-VOLUME	/var/lib/mysql
+RUN	apk add telegraf --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
-EXPOSE	3306
+COPY	telegraf.conf /etc/telegraf/telegraf.conf
 
-ENTRYPOINT	sh start.sh
+RUN mkdir -p /run/mysqld && touch /run/mysqld/mysqld.sock
+
+RUN mkdir -p /setup
+COPY wordpress.sql /setup/wordpress.sql
+COPY start.sh /setup/start.sh
+
+RUN sed -i "s/MYSQL_USERNAME/$MYSQL_USERNAME/g" /setup/wordpress.sql
+RUN sed -i "s/MYSQL_PASSWORD/$MYSQL_PASSWORD/g" /setup/wordpress.sql
+
+VOLUME [ "/var/lib/mysql" ]
+
+EXPOSE 3306
+
+ENTRYPOINT sh /setup/start.sh
