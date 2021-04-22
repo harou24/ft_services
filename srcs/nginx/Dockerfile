@@ -1,8 +1,5 @@
 FROM	alpine:3.12
 
-ARG	SSH_USERNAME
-ARG	SSH_PASSWORD
-
 RUN	apk update && apk upgrade
 
 RUN	apk add openssh
@@ -13,8 +10,8 @@ RUN	apk add telegraf --repository=http://dl-cdn.alpinelinux.org/alpine/edge/comm
 
 COPY	telegraf.conf /etc/telegraf/telegraf.conf
 
-RUN	adduser -D $SSH_USERNAME
-RUN	echo "$SSH_USERNAME:$SSH_PASSWORD" | chpasswd
+RUN	adduser -D ssh
+RUN	echo "ssh:hellossh" | chpasswd
 RUN	ssh-keygen -A
 
 RUN	openssl req -x509 -nodes -days 365 \

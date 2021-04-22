@@ -18,7 +18,7 @@ RUN	mkdir -p /run/nginx
 
 RUN	rm 		/etc/nginx/conf.d/default.conf
 COPY	wordpress.conf	/etc/nginx/conf.d/wordpress.conf
-
+COPY	wp-config.php	/var/www/wordpress/
 COPY	telegraf.conf /etc/telegraf/telegraf.conf
 COPY	start.sh /setup/start.sh
 
