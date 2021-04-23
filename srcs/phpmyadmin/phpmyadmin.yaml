@@ -5,7 +5,7 @@ metadata:
   labels:
     app: phpmyadmin
   annotations:
-    metallb.universe.tf/allow-shared-ip: ft_services_key
+    metallb.universe.tf/allow-shared-ip: ft_services_shared_key
 spec:
   selector:
     app: phpmyadmin

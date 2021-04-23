@@ -22,3 +22,4 @@ COPY 	grafana.db /grafana/data/grafana.db
 EXPOSE	3000
 
 ENTRYPOINT sh /setup/start.sh
+
