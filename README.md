@@ -27,5 +27,15 @@ parts.
 - FTPS server listening on port 21.
 - A Grafana platform, listening on port 3000, linked with an InfluxDB database.
 
+# Tools
+  - Minikube : minikube is local Kubernetes, focusing on making it easy to learn and develop for Kubernetes.
+  - Docker : software platform for building applications based on containers.
+  - VirtualBox : general-purpose virtualization tool.
+  
+# How to run
+
+```bash
+bash setup.sh
+
 
 
