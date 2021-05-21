@@ -1,0 +1,15 @@
+name: CI
+on:   
+  - pull_request
+  - push
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    name: job1
+    steps:
+    - name: bash setup.sh 
+      id: minikube
+      uses: medyagh/setup-minikube@master
+    # now you can run kubectl to see the pods in the cluster
+    - name: kubectl 
+      run: kubectl get pods -A
