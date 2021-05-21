@@ -36,6 +36,3 @@ parts.
 
 ```bash
 bash setup.sh
-
-
-
