@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     name: job1
     steps:
+    - run: ls
     - run: bash setup.sh 
       id: minikube
     # now you can run kubectl to see the pods in the cluster
