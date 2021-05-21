@@ -19,20 +19,20 @@ docker build -t ft_services_influxdb srcs/influxdb/.
 docker build -t ft_services_grafana srcs/grafana/.
 
 # APPLYING CONFIG FILES
-kubectl apply -f srcs/metallb.yaml
-kubectl apply -f srcs/mysql/mysql.yaml
-kubectl apply -f srcs/ftps/ftps.yaml
-kubectl apply -f srcs/phpmyadmin/phpmyadmin.yaml
-kubectl apply -f srcs/wordpress/wordpress.yaml
-kubectl apply -f srcs/nginx/nginx.yaml
-kubectl apply -f srcs/influxdb/influxdb.yaml
-kubectl apply -f srcs/grafana/grafana.yaml
+kubectl apply -f srcs/metallb.yaml --kubeconfig="~/.kube/config"
+kubectl apply -f srcs/mysql/mysql.yaml --kubeconfig="~/.kube/config"
+kubectl apply -f srcs/ftps/ftps.yaml --kubeconfig="~/.kube/config"
+kubectl apply -f srcs/phpmyadmin/phpmyadmin.yaml --kubeconfig="~/.kube/config"
+kubectl apply -f srcs/wordpress/wordpress.yaml --kubeconfig="~/.kube/config"
+kubectl apply -f srcs/nginx/nginx.yaml --kubeconfig="~/.kube/config"
+kubectl apply -f srcs/influxdb/influxdb.yaml --kubeconfig="~/.kube/config"
+kubectl apply -f srcs/grafana/grafana.yaml --kubeconfig="~/.kube/config"
 
 # TO MAKE SURE ALL SERVICES HAVE STARTED
 sleep 15
 
 # IMPORTING WORDPRESS CONFIG
-kubectl exec -i `kubectl get pods | grep -o "\S*mysql\S*"` -- mysql wordpress -u root < srcs/mysql/wordpress.sql
+kubectl exec -i `kubectl get pods | grep -o "\S*mysql\S*"` -- mysql wordpress -u root < srcs/mysql/wordpress.sql --kubeconfig="~/.kube/config"
 
 # OPENING DASHBOARD IN WEB BROWSER
 minikube dashboard
